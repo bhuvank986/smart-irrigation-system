@@ -1,0 +1,61 @@
+#include <LiquidCrystal.h>
+float moisture;
+int moistPercent;
+
+LiquidCrystal lcd(7,8,6,5,4,3);
+
+void setup() { // setting the modes of the pins
+  lcd.begin(16,2);
+  Serial.begin(9600);
+  pinMode(A0, INPUT);
+  pinMode(7,OUTPUT);
+  pinMode(13,OUTPUT);
+  pinMode(12,OUTPUT);
+  pinMode(10,OUTPUT);
+
+ 
+
+}
+
+void loop() {
+  moisture=analogRead(A0);
+  moistPercent = (moisture/539.00)*100;
+  Serial.println(moistPercent);
+  lcd.setCursor(0,0); 
+  lcd.print("moisture Level:");
+  lcd.setCursor(0,1);
+  lcd.print(moistPercent);
+  lcd.println("%");
+  
+  //To check wheather the moisture is less 50%
+  if (moistPercent>=0 && moistPercent<50){
+  lcd.setCursor(0,1);
+  lcd.print(moistPercent);
+  lcd.println("%");
+  lcd.print(" motor on  ");
+  digitalWrite(13, LOW);// To turn on the motor
+  digitalWrite(12, HIGH );
+  digitalWrite(10, HIGH );// To turn on the Led
+  delay(500);
+  digitalWrite(10, LOW ); 
+  delay(500);
+  
+  }
+  else if(moistPercent>=50 && moistPercent<100){
+  lcd.setCursor(0,1);
+  lcd.print(moistPercent);
+  lcd.println("%");
+  lcd.print(" motor off ");
+  digitalWrite(13, LOW);// To turn off the motor
+  digitalWrite(12, LOW);
+  digitalWrite(10, LOW );// To turn off the LED
+  }
+  else {
+  digitalWrite(13, LOW);// To turn off the motor
+  digitalWrite(12, LOW);
+  digitalWrite(10, LOW );// To turn off the LED
+  }
+  
+  }
+
+
